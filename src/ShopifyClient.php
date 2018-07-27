@@ -63,7 +63,7 @@ class ShopifyClient
 
     private function uriBuilder($resource)
     {
-        return 'https://' . $this->username . ':' . $this->password . '@' . $this->shopName . '/admin/' . $resource . '.json';
+        return 'https://' . $this->apiKey . ':' . $this->password . '@' . $this->shopName . '/admin/' . $resource . '.json';
     }
 
     private function authHeaders()
