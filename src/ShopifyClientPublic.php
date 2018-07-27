@@ -6,10 +6,9 @@
 
 namespace Shopify;
 
-class ShopifyClient
+class ShopifyClientPublic
 {
-    private $apiKey;
-    private $password;
+    private $accessToken;
     private $shopName;
     private $httpClient;
 
@@ -23,14 +22,13 @@ class ShopifyClient
         "variant"
     ];
 
-    public function __construct($apiKey, $password, $shopName)
+    public function __construct($accessToken, $shopName)
     {
         foreach (self::$resources as $resource) {
             $className = 'Shopify\Shopify' . str_replace("_", "", ucwords($resource, "_"));
             $this->{$resource . "s"} = new $className($this);
         }
-        $this->apiKey = $apiKey;
-        $this->password = $password;
+        $this->setAccessToken($accessToken);
         $this->setShopName($shopName);
         $this->setHttpClient();
     }
@@ -63,14 +61,14 @@ class ShopifyClient
 
     private function uriBuilder($resource)
     {
-        return 'https://' . $this->username . ':' . $this->password . '@' . $this->shopName . '/admin/' . $resource . '.json';
+        return 'https://' . $this->shopName . '/admin/' . $resource . '.json';
     }
 
     private function authHeaders()
     {
         return [
             'Content-Type: application/json',
-        //    'X-Shopify-Access-Token: ' . $this->accessToken
+            'X-Shopify-Access-Token: ' . $this->accessToken
         ];
     }
 
